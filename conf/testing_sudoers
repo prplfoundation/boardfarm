@@ -1,0 +1,2 @@
+Cmnd_Alias TESTING_CMDS = /sbin/reboot, /usr/bin/start_lan_client, /usr/bin/ip_neigh_flush, /usr/bin/turn_on_pppoe, /usr/bin/restart_tftp_server, /usr/bin/stop_lan_client
+__username__ ALL=(ALL) NOPASSWD: TESTING_CMDS

@@ -1,0 +1,10 @@
+[Unit]
+Description=Startup Script for non-root Boardfarm LAN setup
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/setup_lan
+Type=forking
+
+[Install]
+WantedBy=multi-user.target

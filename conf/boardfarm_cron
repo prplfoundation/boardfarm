@@ -1,0 +1,1 @@
+*/10 * * * * root systemctl start dhclient.eth0
