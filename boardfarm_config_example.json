@@ -1,13 +1,20 @@
 {
     "board01": {
-        "board_type": "apXYZ",
-        "conn_cmd": "telnet consoleserver.mysite.com 6001",
-        "lan_device": "machine01",
+        "board_type": "db120",
+        "conn_cmd": "cu -l /dev/ttyUSB0 -s 115200",
+        "lan_device": "rpi3",
         "location": "austin",
-        "powerip": "pdu.mysite.com",
-        "powerport": "8",
-        "wan_device": "machine02",
-        "notes": "Old board"
+	"powerip": "10.0.2.230",
+        "powerport": "1",
+        "power_username": "outlet1",
+        "power_password": "test",
+        "wan_device": "rpi2",
+        "notes": "Old board",
+	"connection_type": "local_serial",
+	"lan_username": "tester",
+	"lan_password": "test",
+	"wan_password": "test",
+	"wan_username": "tester"
     },
     "board02": {
         "board_type": "apXYZ",

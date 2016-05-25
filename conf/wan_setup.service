@@ -1,0 +1,10 @@
+[Unit]
+Description=Startup Script for non-root Boardfarm WAN setup
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/setup_wan
+Type=forking
+
+[Install]
+WantedBy=multi-user.target
