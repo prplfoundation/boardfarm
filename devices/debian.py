@@ -75,13 +75,14 @@ class DebianBox(base.BaseDevice):
         except:
             pass
         time.sleep(15)  # Wait for the network to go down.
-        for i in range(0, 50):
+        for i in range(0, 20):
             try:
                 pexpect.spawn('ping -w 1 -c 1 ' + self.name).expect('64 bytes', timeout=1)
             except:
-                print(self.name + " not up yet, after %s seconds." % (i + 15))
+                time.sleep(1)
+                print(self.name + " not up yet, after %s tries." % (i))
             else:
-                print("%s is back after %s seconds, waiting for network daemons to spawn." % (self.name, i + 14))
+                print("%s is back after %s tries, waiting for network daemons to spawn." % (self.name, i))
                 time.sleep(15)
                 break
         self.__init__(self.name, self.color,
