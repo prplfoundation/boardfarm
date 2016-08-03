@@ -76,7 +76,7 @@ class NonRootDebianBox(base.BaseDevice):
 
     def reset(self):
         self.sendline('sudo reboot')
-        self.expect(['going down','disconnected'])
+        self.expect(['going down','disconnected', 'closed'])
         try:
             self.expect(self.prompt, timeout=10)
         except:
@@ -86,14 +86,16 @@ class NonRootDebianBox(base.BaseDevice):
             try:
                 pexpect.spawn('ping -w 1 -c 1 ' + self.name).expect('64 bytes', timeout=1)
             except:
-                print(self.name + " not up yet, after %s seconds." % (i + 15))
+                time.sleep(1)
+                print(self.name + " not up yet, after %s tries." % (i))
             else:
-                print("%s is back after %s seconds, waiting for network daemons to spawn." % (self.name, i + 14))
+                print("%s is back after %s tries, waiting for network daemons to spawn." % (self.name, i))
                 time.sleep(15)
                 break
         self.__init__(self.name, self.color,
-                      self.output, self.username,
+                      self.username,
                       self.password, self.port,
+                      output=self.output,
                       reboot=False)
 
     def get_ip_addr(self, interface):
