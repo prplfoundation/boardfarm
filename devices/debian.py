@@ -69,13 +69,13 @@ class DebianBox(base.BaseDevice):
 
     def reset(self):
         self.sendline('reboot')
-        self.expect(['going down','disconnected'])
+        self.expect(['going down','disconnected', 'closed'])
         try:
             self.expect(self.prompt, timeout=10)
         except:
             pass
         time.sleep(15)  # Wait for the network to go down.
-        for i in range(0, 20):
+        for i in range(0, 50):
             try:
                 pexpect.spawn('ping -w 1 -c 1 ' + self.name).expect('64 bytes', timeout=1)
             except:
@@ -85,8 +85,9 @@ class DebianBox(base.BaseDevice):
                 time.sleep(15)
                 break
         self.__init__(self.name, self.color,
-                      self.output, self.username,
+                      self.username,
                       self.password, self.port,
+                      output=self.output,
                       reboot=False)
 
     def get_ip_addr(self, interface):
