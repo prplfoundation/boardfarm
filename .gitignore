@@ -15,7 +15,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+^lib/
 lib64/
 parts/
 sdist/
@@ -44,13 +44,15 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
+**/assets/style.css
+**/report.html
+**/report.xml
 
 # Translations
 *.mo
 *.pot
 
 # Django stuff:
-*.log
 local_settings.py
 
 # Sphinx documentation
@@ -70,3 +72,21 @@ results/
 
 # Text editor temporally files
 *.swp
+
+# ctas
+TAGS
+tags
+
+# Alternate config files
+*.json
+
+# Apple foo
+.AppleDouble
+.DS_Store
+
+# Patch foo
+*.rej
+*.orig
+
+# geckodriver log
+geckodriver.log

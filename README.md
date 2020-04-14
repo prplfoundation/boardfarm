@@ -23,12 +23,45 @@ Software Setup
 
 If you are a Linux user, and wish to run and/or develop tests, please clone this repository and then install needed libaries:
 ```shell
-apt-get install python-pip curl
+apt-get install python-pip curl python-tk libsnmp-dev snmp-mibs-downloader
 cd openwrt/
 pip install -r requirements.txt
 ```
 
 The file `config.py` is the main configuration. For example, it sets the location of the file that describes the available hardware.
+
+### Compiling Qemu to simulate devices
+
+[Qemu](https://www.qemu.org/) does full system simulation, and boardfarm can use that tool to run tests on simulated devices (e.g. a simulated OpenWrt router). If you want to use qemu, you will want a recent version (3.0 or higher). You may have to compile on your own system, and if so here's how:
+
+```sh
+sudo apt-get update
+sudo apt-get install build-essential zlib1g-dev pkg-config \
+    libglib2.0-dev binutils-dev libboost-all-dev autoconf \
+    libtool libssl-dev libpixman-1-dev libpython-dev python-pip \
+    python-capstone virtualenv wget
+wget https://download.qemu.org/qemu-4.0.0.tar.xz
+tar xvJf qemu-4.0.0.tar.xz
+cd qemu-4.0.0
+./configure
+make
+sudo make install
+```
+
+### Getting Docker for simulated devices
+
+Docker is also useful for creating simulated devices for running tests. To get the latest stable docker and set it up correctly:
+
+```sh
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt-get update
+sudo apt-get install -y docker-ce
+# Add your user to the docker group so that you can run docker without sudo
+sudo usermod -aG docker $USER
+```
 
 Hardware Setup
 --------------
@@ -229,5 +262,40 @@ The best automated tests share a few qualities:
 * They are easy to read - Tests should follow the [PEP8 Style Guide](http://legacy.python.org/dev/peps/pep-0008/).
 
 The goal is to catch bugs in the software being tested. It is an annoying distraction when tests themselves crash. Keep your tests simple so that others can easily figure them out.
+
+Boardfarm overlays
+-----------------
+
+Recently support for having overlays in a separate directory (e.g. a separat
+git repository was added. This allows your own private tests, boards, and
+testsuites, templates that you want to keep separate for whatever reason.
+It's expected that if this is not private you can create a git repo and share
+your layer with others.
+
+The layout of the overlay will look exactly the same as the boardfarm repo:
+
+```
+my_overlay/
+├── devices
+│   ├── my_device.py
+├── html
+│   └── template_results.html
+├── tests
+│   ├── this.py
+│   ├── that.py
+│   └── foobar.py
+└── testsuites.cfg
+```
+
+Tests, devices, and testsuites in your overlay are added to the available
+tests, devices, testsuites. The email templates replace the ones from the main
+boardfarm repo
+
+To specify an over lay you simply need to the space separated overlays to the
+BFT_OVERLAY environment variable:
+
+export BFT_OVERLAY="../boardfarm-foo/ ../boardfarm-bar"
+
+Then after running bft you should have access to your new tests, device types, etc
 
 Good luck and thanks for reading!
